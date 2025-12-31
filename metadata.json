@@ -1,0 +1,5 @@
+{
+  "name": "WealthTrack Pro",
+  "description": "Offline-First Mobile Investment Dashboard. Features automated exchange rate fetching and modular portfolio rebalancing tools.",
+  "requestFramePermissions": []
+}
