@@ -77,7 +77,7 @@ const PriceService = {
   },
   async fetchHkdTwdRate(): Promise<number> {
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || '' });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: "What is the current exchange rate from 1 HKD to TWD? Return only the number.",
