@@ -42,7 +42,7 @@ const PriceService = {
       Return the data strictly in JSON format. For Hong Kong stocks like 2800.HK, ensure the currency is HKD. For US stocks like VOO, it's USD.`;
 
       const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
+        model: 'gemini-1.5-flash',
         contents: prompt,
         config: {
           tools: [{ googleSearch: {} }],
@@ -79,7 +79,7 @@ const PriceService = {
     try {
       const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || '' });
       const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
+        model: 'gemini-1.5-flash',
         contents: "What is the current exchange rate from 1 HKD to TWD? Return only the number.",
         config: {
           tools: [{ googleSearch: {} }],
@@ -92,7 +92,8 @@ const PriceService = {
         }
       });
       return JSON.parse(response.text).rate || 4.15;
-    } catch {
+    } catch (error) {
+      console.error("Rate Fetch Error:", error);
       return 4.15; // Fallback
     }
   }
