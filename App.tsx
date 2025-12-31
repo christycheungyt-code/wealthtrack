@@ -37,12 +37,14 @@ const CHART_COLORS = ['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#ef4444', '#0
 const PriceService = {
   async fetchRealtimePrice(symbol: string): Promise<{price: number, name: string, currency: string, sourceUrls: string[]} | null> {
     try {
+      // 確保使用 Vite 的環境變數讀取方式
       const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || '' });
+      
       const prompt = `Find the current real-time stock price, official name, and trading currency for the ticker "${symbol}" from Google Finance. 
       Return the data strictly in JSON format. For Hong Kong stocks like 2800.HK, ensure the currency is HKD. For US stocks like VOO, it's USD.`;
 
       const response = await ai.models.generateContent({
-        // 強制切換為 2.0 版本，這是目前穩定性最高的
+        // 修改模型為 2.0 版本，這是目前穩定性最高的
         model: 'gemini-2.0-flash', 
         contents: prompt,
         config: {
@@ -71,7 +73,7 @@ const PriceService = {
       }
 
       return { ...data, sourceUrls: Array.from(new Set(sourceUrls)) };
-    } catch (error: any) {
+    } catch (error) {
       console.error("Gemini Fetch Error:", error);
       return null;
     }
@@ -80,6 +82,7 @@ const PriceService = {
     try {
       const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || '' });
       const response = await ai.models.generateContent({
+        // 這裡也要同步改為 gemini-2.0-flash
         model: 'gemini-2.0-flash',
         contents: "What is the current exchange rate from 1 HKD to TWD? Return only the number.",
         config: {
@@ -93,7 +96,7 @@ const PriceService = {
         }
       });
       return JSON.parse(response.text).rate || 4.15;
-    } catch (error: any) {
+    } catch (error) {
       console.error("Rate Fetch Error:", error);
       return 4.15; // Fallback
     }
