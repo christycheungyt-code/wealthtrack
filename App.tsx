@@ -37,13 +37,15 @@ const CHART_COLORS = ['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#ef4444', '#0
 const PriceService = {
   async fetchRealtimePrice(symbol: string): Promise<{price: number, name: string, currency: string, sourceUrls: string[]} | null> {
     try {
+      // 確保使用 Vite 的環境變數讀取方式
       const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || '' });
+      
       const prompt = `Find the current real-time stock price, official name, and trading currency for the ticker "${symbol}" from Google Finance. 
       Return the data strictly in JSON format. For Hong Kong stocks like 2800.HK, ensure the currency is HKD. For US stocks like VOO, it's USD.`;
 
       const response = await ai.models.generateContent({
-        // 修正處：加上 models/ 前綴
-        model: 'models/gemini-1.5-flash',
+        // 修改模型為 2.0 版本，並移除 models/ 前綴
+        model: 'gemini-2.0-flash', 
         contents: prompt,
         config: {
           tools: [{ googleSearch: {} }],
@@ -80,8 +82,8 @@ const PriceService = {
     try {
       const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || '' });
       const response = await ai.models.generateContent({
-        // 修正處：加上 models/ 前綴
-        model: 'models/gemini-1.5-flash',
+        // 這裡也要同步改為 gemini-2.0-flash
+        model: 'gemini-2.0-flash',
         contents: "What is the current exchange rate from 1 HKD to TWD? Return only the number.",
         config: {
           tools: [{ googleSearch: {} }],
