@@ -37,12 +37,12 @@ const CHART_COLORS = ['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#ef4444', '#0
 const PriceService = {
   async fetchRealtimePrice(symbol: string): Promise<{price: number, name: string, currency: string, sourceUrls: string[]} | null> {
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || '' });
       const prompt = `Find the current real-time stock price, official name, and trading currency for the ticker "${symbol}" from Google Finance. 
       Return the data strictly in JSON format. For Hong Kong stocks like 2800.HK, ensure the currency is HKD. For US stocks like VOO, it's USD.`;
 
       const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
+        model: 'gemini-1.5-flash',
         contents: prompt,
         config: {
           tools: [{ googleSearch: {} }],
