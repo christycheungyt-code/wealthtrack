@@ -44,7 +44,7 @@ const PriceService = {
       Return the data strictly in JSON format. For Hong Kong stocks like 2800.HK, ensure the currency is HKD. For US stocks like VOO, it's USD.`;
 
       const response = await ai.models.generateContent({
-        // 修改模型為 2.0 版本，這是目前穩定性最高的
+        // 修正：使用 gemini-2.0-flash，這是目前對 Google Search 工具支援度最好的模型
         model: 'gemini-2.0-flash', 
         contents: prompt,
         config: {
@@ -82,7 +82,7 @@ const PriceService = {
     try {
       const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || '' });
       const response = await ai.models.generateContent({
-        // 這裡也要同步改為 gemini-2.0-flash
+        // 同步修改為 2.0 版本
         model: 'gemini-2.0-flash',
         contents: "What is the current exchange rate from 1 HKD to TWD? Return only the number.",
         config: {
